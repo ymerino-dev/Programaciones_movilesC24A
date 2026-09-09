@@ -1,5 +1,8 @@
 package com.merinoana.registronotas
 
+import androidx.compose.material3.Button
+import androidx.compose.ui.text.style.TextAlign
+import kotlin.math.roundToInt
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -56,6 +59,11 @@ fun RegistroNotasApp(modifier: Modifier = Modifier) {
 
     var redondearPromedio by remember { mutableStateOf(false) }
     var confirmarNotas by remember { mutableStateOf(false) }
+
+    // Memoria para guardar los resultados del cálculo
+    var mostrarResultado by remember { mutableStateOf(false) }
+    var promedioPonderado by remember { mutableFloatStateOf(0f) }
+    var promedioFinal by remember { mutableFloatStateOf(0f) }
 
     // Contenedor principal
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
@@ -143,6 +151,45 @@ fun RegistroNotasApp(modifier: Modifier = Modifier) {
             steps = 19
         )
         // --- FIN: Curso 4 ---
+        Spacer(modifier = Modifier.height(24.dp))
 
+        // Botón principal
+        Button(
+            onClick = {
+                // 1. Calculamos el promedio exacto con los pesos del documento[cite: 1]
+                val ponderado = (notaFundamentos * 0.20f) +
+                        (notaPOO * 0.25f) +
+                        (notaMoviles * 0.30f) +
+                        (notaBD * 0.25f)
+
+                promedioPonderado = ponderado
+
+                // 2. Evaluamos el Switch para decidir el promedio final[cite: 1]
+                if (redondearPromedio) {
+                    promedioFinal = ponderado.roundToInt().toFloat() // Redondea al entero más cercano[cite: 1]
+                } else {
+                    promedioFinal = ponderado // Lo deja tal cual
+                }
+
+                // 3. Encendemos la bandera para mostrar la tarjeta
+                mostrarResultado = true
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = confirmarNotas // ¡Aquí aplicamos el parámetro enabled![cite: 1]
+        ) {
+            Text(text = "CALCULAR PROMEDIO")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Mensaje gris inicial[cite: 1]
+        if (!mostrarResultado) {
+            Text(
+                text = "Asigna las notas y confirma para calcular",
+                color = Color.Gray,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }

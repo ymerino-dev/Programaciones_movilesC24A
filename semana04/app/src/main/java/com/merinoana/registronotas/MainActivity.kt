@@ -32,6 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.foundation.shape.RoundedCornerShape
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,6 +157,34 @@ fun RegistroNotasApp(modifier: Modifier = Modifier) {
         // --- FIN: Curso 4 ---
         Spacer(modifier = Modifier.height(24.dp))
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Fila del Switch para redondear
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Redondear promedio final")
+            androidx.compose.material3.Switch(
+                checked = redondearPromedio,
+                onCheckedChange = { nuevoEstado -> redondearPromedio = nuevoEstado }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Fila del Checkbox de confirmación
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            androidx.compose.material3.Checkbox(
+                checked = confirmarNotas,
+                onCheckedChange = { nuevoEstado -> confirmarNotas = nuevoEstado }
+            )
+            Text(text = "Confirmo que las notas son correctas")
+        }
+
         // Botón principal
         Button(
             onClick = {
@@ -191,5 +223,96 @@ fun RegistroNotasApp(modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Center
             )
         }
+        // --- INICIO: Tarjeta de Resultados ---
+        if (mostrarResultado) {
+
+            // 1. Lógica del 'when' para los estados y colores[cite: 1]
+            val (observacion, colorChip) = when {
+                promedioFinal >= 17f -> Pair("EXCELENTE", Color(0xFF2E7D32)) // Verde oscuro
+                promedioFinal >= 13f -> Pair("APROBADO", Color(0xFF4CAF50)) // Verde normal
+                promedioFinal >= 10f -> Pair("EN RECUPERACIÓN", Color(0xFFFF9800)) // Ámbar
+                else -> Pair("DESAPROBADO", Color(0xFFF44336)) // Rojo
+            }
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+
+                    // Promedio ponderado (con 2 decimales)[cite: 1]
+                    Text(
+                        text = "Promedio ponderado: ${String.format("%.2f", promedioPonderado)}",
+                        fontSize = 16.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Promedio Final
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            text = "Promedio final: ",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF6750A4)
+                        )
+                        // Si es entero, se quitan los decimales en la vista para mayor limpieza
+                        Text(
+                            text = if (redondearPromedio) "${promedioFinal.toInt()}" else String.format("%.2f", promedioFinal),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF6750A4)
+                        )
+
+                        if (redondearPromedio) {
+                            Text(
+                                text = " (redondeado)",
+                                color = Color.Gray,
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Chip de estado (El rectángulo de color con el texto)
+                    Surface(
+                        color = colorChip.copy(alpha = 0.2f),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Text(
+                            text = observacion,
+                            color = colorChip,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Mensaje final y tu firma[cite: 1]
+            Text(
+                text = "✓ Promedio calculado correctamente",
+                color = Color(0xFF2E7D32),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Desarrollado por: Ana Merino", // Tu nombre aquí
+                color = Color.Gray,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp
+            )
+        }
+        // --- FIN: Tarjeta de Resultados ---
     }
 }

@@ -87,5 +87,62 @@ fun RegistroNotasApp(modifier: Modifier = Modifier) {
         )
         // --- FIN: Curso 1 ---
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // --- INICIO: Curso 2 - POO ---
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Programación Orientada a Objetos (25%)", fontWeight = FontWeight.SemiBold)
+            Text(text = "${notaPOO.toInt()}", fontWeight = FontWeight.Bold, color = Color(0xFF6750A4))
+        }
+        Slider(
+            value = notaPOO,
+            onValueChange = { nuevaNota -> notaPOO = nuevaNota },
+            valueRange = 0f..20f,
+            steps = 19
+        )
+        // --- FIN: Curso 2 ---
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // --- INICIO: Curso 3 - Móviles ---
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Programación en Móviles (30%)", fontWeight = FontWeight.SemiBold)
+            Text(text = "${notaMoviles.toInt()}", fontWeight = FontWeight.Bold, color = Color(0xFF6750A4))
+        }
+        Slider(
+            value = notaMoviles,
+            onValueChange = { nuevaNota -> notaMoviles = nuevaNota },
+            valueRange = 0f..20f,
+            steps = 19
+        )
+        // --- FIN: Curso 3 ---
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // --- INICIO: Curso 4 - Base de Datos ---
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Base de Datos (25%)", fontWeight = FontWeight.SemiBold)
+            Text(text = "${notaBD.toInt()}", fontWeight = FontWeight.Bold, color = Color(0xFF6750A4))
+        }
+        Slider(
+            value = notaBD,
+            onValueChange = { nuevaNota -> notaBD = nuevaNota },
+            valueRange = 0f..20f,
+            steps = 19
+        )
+        // --- FIN: Curso 4 ---
+
     }
 }

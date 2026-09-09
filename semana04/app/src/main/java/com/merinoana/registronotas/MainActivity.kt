@@ -36,6 +36,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +73,7 @@ fun RegistroNotasApp(modifier: Modifier = Modifier) {
     var promedioFinal by remember { mutableFloatStateOf(0f) }
 
     // Contenedor principal
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState())) {
 
         // Encabezado principal de la sección
         Text(text = "Notas del ciclo", fontSize = 20.sp, fontWeight = FontWeight.Bold)
@@ -207,7 +210,7 @@ fun RegistroNotasApp(modifier: Modifier = Modifier) {
                 mostrarResultado = true
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = confirmarNotas // ¡Aquí aplicamos el parámetro enabled![cite: 1]
+            enabled = confirmarNotas // ¡Aquí aplicamos el parámetro enabled![cite: 1]6
         ) {
             Text(text = "CALCULAR PROMEDIO")
         }
